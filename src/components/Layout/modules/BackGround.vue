@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
 const canvasBg = ref<HTMLCanvasElement | null>(null)
-const backGround = ref<HTMLDivElement | null>(null)
 /** canvas 的上下文 */
 let ctx = ref<CanvasRenderingContext2D | null>(null)
 /** 设置每一列的宽度 */
@@ -61,9 +62,9 @@ const draw = () => {
 }
 
 const init = () => {
-  const backGroundWidth = backGround.value?.clientWidth || 0
+  const backGroundWidth = document.body.clientWidth
   canvasBg.value?.setAttribute('width', backGroundWidth + 'px')
-  canvasBg.value?.setAttribute('height', backGround.value?.clientHeight + 'px')
+  canvasBg.value?.setAttribute('height', document.body.clientHeight + 'px')
   ctx.value = canvasBg.value ? canvasBg.value.getContext('2d') : null
   colNum.value = Math.floor(backGroundWidth / colWidth) + 2
   rowNum.value = Math.floor(window.innerHeight / FONT_SIZE)
@@ -73,36 +74,36 @@ const init = () => {
   })
   renderTimer.value = setInterval(draw, RENDER_SPEED)
 }
-onMounted(init)
+onMounted(() => {
+  !!canvasBg && init()
+})
+
+watch(canvasBg, (newValue, oldValue) => {
+  if (newValue !== oldValue && newValue) {
+    firstRender.value = true
+    init()
+  }
+})
 </script>
 
 <template>
-  <div class="back-ground" ref="backGround">
-    <canvas class="nice-bg" ref="canvasBg"></canvas>
-    <main class="main"><slot></slot></main>
-  </div>
+  <canvas v-if="!route.meta.hideBackGround" class="nice-bg" ref="canvasBg"></canvas>
+  <main class="main"><slot></slot></main>
 </template>
 
 <style scoped lang="less">
-.back-ground {
-  width: 100vw;
-  min-height: 100vh;
-  background-color: #fafafa;
-  position: relative;
-  z-index: -1;
-  .nice-bg {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    z-index: 0;
-  }
-  .main {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    z-index: 1;
-  }
+.nice-bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  z-index: 0;
+}
+.main {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  z-index: 1;
 }
 </style>
