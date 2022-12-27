@@ -1,6 +1,6 @@
 import { createWebHistory, RouteRecordRaw, createRouter } from 'vue-router'
-
-const routes = <RouteRecordRaw[]>[
+import feature from './feature'
+let routes = <RouteRecordRaw[]>[
   {
     path: '/',
     name: 'Home',
@@ -21,6 +21,9 @@ const routes = <RouteRecordRaw[]>[
   },
   { path: '/:pathMatch(.*)*', name: 'NotFound', redirect: '/404' }
 ]
+
+// Merge feature routes
+routes = [...routes, ...feature]
 
 const router = createRouter({
   routes,
