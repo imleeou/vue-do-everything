@@ -4,6 +4,9 @@ let routes = <RouteRecordRaw[]>[
   {
     path: '/',
     name: 'Home',
+    meta: {
+      showLayout: true
+    },
     component: () => import('@/views/home/index.vue')
   },
   {
@@ -14,9 +17,6 @@ let routes = <RouteRecordRaw[]>[
   {
     path: '/404',
     name: '404',
-    meta: {
-      hideBackGround: true
-    },
     component: () => import('@/views/404/index.vue')
   },
   { path: '/:pathMatch(.*)*', name: 'NotFound', redirect: '/404' }
