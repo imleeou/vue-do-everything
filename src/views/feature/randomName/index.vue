@@ -69,7 +69,7 @@ const addNameClick = () => {
   addName.value = ''
 }
 
-// 监听nameSource的变化
+/** 监听nameSource的变化 */
 watch(
   () => [...nameSource.value],
   (val, oldVal) => {
