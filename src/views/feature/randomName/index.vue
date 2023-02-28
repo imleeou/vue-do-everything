@@ -8,6 +8,7 @@ let stopDelay = ref(3)
 
 const timer = ref<NodeJS.Timeout | null>(null)
 const stopTimer = ref<NodeJS.Timeout | null>(null)
+/** 开始 */
 const start = () => {
   if (nameSource.value.length === 0) {
     alert('可随机名字列表为空')
@@ -22,6 +23,7 @@ const start = () => {
     end()
   }, stopDelay.value * 1000)
 }
+/** 重置 */
 const reset = () => {
   end()
   name.value = ''
@@ -69,7 +71,7 @@ const addNameClick = () => {
   addName.value = ''
 }
 
-// 监听nameSource的变化
+/** 监听nameSource的变化 */
 watch(
   () => [...nameSource.value],
   (val, oldVal) => {
