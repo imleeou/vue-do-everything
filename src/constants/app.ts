@@ -1,37 +1,32 @@
 import { TabType } from '@/types/app'
+import { TabTypeEnum } from './enum'
 
 /** 顶部tab数据 */
 export const TABS: TabType[] = [
   {
     path: '/home',
     name: '首页',
-    type: 'normal'
+    type: TabTypeEnum.NORMAL
   },
   {
     name: '小玩意',
-    type: 'dropdown',
+    type: TabTypeEnum.DROPDOWN,
     children: [
       {
         path: '/game',
         name: '游戏',
-        type: 'normal'
+        type: TabTypeEnum.NORMAL
       },
       {
         path: '/feature/randomName',
         name: '随机点名',
-        type: 'normal'
+        type: TabTypeEnum.NORMAL
       }
     ]
   },
   {
     link: 'https://github.com/imleeou',
-    type: 'icon',
+    type: TabTypeEnum.ICON,
     icon: new URL('../assets/images/tabs/github.png', import.meta.url).href
   }
 ]
-/** 顶部tab类型枚举 */
-export enum TAB_TYPE {
-  NORMAL = 'normal',
-  ICON = 'icon',
-  DROPDOWN = 'dropdown'
-}

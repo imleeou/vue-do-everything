@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { TABS, TAB_TYPE } from '@/constants/app'
-import Dropdown from '@/components/Dropdown/index.vue'
 import { ref } from 'vue'
-import { IconTabType, NormalTabType } from '@/types/app'
 import { useRouter } from 'vue-router'
+import { TABS } from '@/constants/app'
+import { TabTypeEnum } from '@/constants/enum'
+import Dropdown from '@/components/Dropdown/index.vue'
+import ThemeSwitch from './ThemeSwitch.vue'
+import { IconTabType, NormalTabType } from '@/types/app'
 
 const router = useRouter()
 /** 激活的index */
@@ -18,6 +20,10 @@ const iconClick = (tab: IconTabType, index: number) => {
   activeIndex.value = index
   if (tab.link) {
     location.href = tab.link
+  } else if (tab.path) {
+    router.push({
+      path: tab.path
+    })
   }
 }
 /** 普通tab点击 */
@@ -34,20 +40,25 @@ const normalClick = (tab: NormalTabType, index: number) => {
 <template>
   <div class="menu">
     <template v-for="(tab, index) in TABS" :key="index">
+      <!-- 普通文本按钮 -->
       <div
         :class="['normal', activeIndex === index && 'active-normal']"
-        v-if="tab.type === TAB_TYPE.NORMAL"
+        v-if="tab.type === TabTypeEnum.NORMAL"
         @click="normalClick(tab, index)"
       >
         {{ tab.name }}
       </div>
-      <div class="icon" v-if="tab.type === TAB_TYPE.ICON" @click="iconClick(tab, index)">
+      <!-- 图标按钮 -->
+      <div class="icon" v-else-if="tab.type === TabTypeEnum.ICON" @click="iconClick(tab, index)">
         <img :src="tab.icon" />
       </div>
-      <template v-if="tab.type === TAB_TYPE.DROPDOWN">
+      <!-- 下拉菜单 -->
+      <template v-else-if="tab.type === TabTypeEnum.DROPDOWN">
         <Dropdown :data="tab" @click="dropdownClick(index)" :active="index === activeIndex"></Dropdown>
       </template>
+      <!-- 模式开关 -->
     </template>
+    <ThemeSwitch></ThemeSwitch>
   </div>
 </template>
 
