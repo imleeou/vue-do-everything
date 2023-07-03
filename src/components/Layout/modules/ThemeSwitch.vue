@@ -2,7 +2,9 @@
 import { Sunny, Moon } from '@element-plus/icons-vue'
 import { useDark, useToggle } from '@vueuse/core'
 
-const isDark = useDark()
+const isDark = useDark({
+  disableTransition: false
+})
 const toggleDark = useToggle(isDark)
 </script>
 
