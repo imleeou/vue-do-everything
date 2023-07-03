@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { DropdownTabType, NormalTabType } from '@/types/app'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { ArrowDown } from '@element-plus/icons-vue'
+import { DropdownTabType, NormalTabType } from '@/types/app'
 
 const router = useRouter()
 /** 是否展示options */
@@ -51,7 +52,7 @@ const handleOption = (tab: NormalTabType) => {
   <div class="dropdown">
     <div class="body" @mouseover="mouseEvent($event)" @mouseleave="mouseEvent($event, 1)">
       <p :class="[active && 'active-name']">{{ data.name }}</p>
-      <img src="../../assets/images/tabs/dropdown-arrow.png" />
+      <el-icon><ArrowDown /></el-icon>
     </div>
     <div class="options" v-if="showOptions" @mouseover="mouseEvent($event)" @mouseleave="mouseEvent($event, 1)">
       <p class="option" v-for="(item, index) in data.children" @click="handleOption(item)" :key="index">
@@ -65,7 +66,7 @@ const handleOption = (tab: NormalTabType) => {
 .dropdown {
   position: relative;
   .active-name {
-    color: @tab-font-color-active;
+    color: var(--text-color-active);
   }
 
   .body {
@@ -74,7 +75,7 @@ const handleOption = (tab: NormalTabType) => {
     align-items: center;
     > p {
       font-size: @tab-font-size;
-      color: @tab-font-color;
+      color: var(--el-text-color-primary);
     }
     > img {
       width: 20px;

@@ -73,10 +73,10 @@ const normalClick = (tab: NormalTabType, index: number) => {
   }
   .normal {
     font-size: @tab-font-size;
-    color: @tab-font-color;
+    color: var(--el-text-color-primary);
   }
   .active-normal {
-    color: @tab-font-color-active;
+    color: var(--text-color-active);
   }
   .icon {
     width: 30px;

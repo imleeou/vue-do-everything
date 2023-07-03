@@ -21,7 +21,7 @@ const toggleDark = useToggle(isDark)
 
 <style lang="less" scoped>
 // 浅色
-@light: #e0e0e0;
+@light: #f1f1f1;
 // 深色
 @dark: #48484a;
 .el-switch {

@@ -1,0 +1,10 @@
+html {
+  --top-bar-bg: #fff;
+  /* 字体选中颜色 */
+  --text-color-active: #81b678;
+}
+
+html.dark {
+  --top-bar-bg: #333;
+  --text-color-active: #c1ffb6;
+}

@@ -18,12 +18,13 @@ import Menu from './Menu.vue'
 .top-bar {
   width: 100%;
   height: 60px;
-  background-color: #333;
-  color: #fff;
+  background-color: var(--top-bar-bg);
+  color: var(--el-text-color-primary);
   padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: var(--el-box-shadow);
   .name-item {
     height: 100%;
     display: flex;
