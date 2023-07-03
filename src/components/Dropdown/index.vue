@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { ArrowDown } from '@element-plus/icons-vue'
 import { DropdownTabType, NormalTabType } from '@/types/app'
 
 const router = useRouter()
@@ -52,7 +51,7 @@ const handleOption = (tab: NormalTabType) => {
   <div class="dropdown">
     <div class="body" @mouseover="mouseEvent($event)" @mouseleave="mouseEvent($event, 1)">
       <p :class="[active && 'active-name']">{{ data.name }}</p>
-      <el-icon><ArrowDown /></el-icon>
+      <el-icon><icon-ep-arrow-down /></el-icon>
     </div>
     <div class="options" v-if="showOptions" @mouseover="mouseEvent($event)" @mouseleave="mouseEvent($event, 1)">
       <p class="option" v-for="(item, index) in data.children" @click="handleOption(item)" :key="index">
