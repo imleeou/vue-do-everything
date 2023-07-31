@@ -9,3 +9,11 @@ export enum TabTypeEnum {
   /** 开关 */
   SWITCH = 'switch'
 }
+
+/** 图标类型 */
+export enum IconTypeEnum {
+  /** 图片 */
+  IMG = 'img',
+  /** 类名 */
+  CLASS = 'class'
+}

@@ -1,5 +1,5 @@
 import { TabType } from '@/types/app'
-import { TabTypeEnum } from './enum'
+import { IconTypeEnum, TabTypeEnum } from './enum'
 
 /** 顶部tab数据 */
 export const TABS: TabType[] = [
@@ -27,6 +27,7 @@ export const TABS: TabType[] = [
   {
     link: 'https://github.com/imleeou',
     type: TabTypeEnum.ICON,
-    icon: new URL('../assets/images/tabs/github.png', import.meta.url).href
+    icon: 'i-carbon-logo-github',
+    iconType: IconTypeEnum.CLASS
   }
 ]

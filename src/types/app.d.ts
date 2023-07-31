@@ -1,4 +1,4 @@
-import { TabTypeEnum } from '@/constants/enum'
+import { TabTypeEnum, IconTypeEnum } from '@/constants/enum'
 /** normal tab */
 interface NormalTabType {
   path: string
@@ -11,6 +11,8 @@ interface IconTabType {
   path?: string
   icon: string
   type: TabTypeEnum.ICON
+  /** 图标类型 */
+  iconType: IconTypeEnum
 }
 /** dropdown tab */
 interface DropdownTabType {

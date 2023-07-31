@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { TABS } from '@/constants/app'
-import { TabTypeEnum } from '@/constants/enum'
+import { IconTypeEnum, TabTypeEnum } from '@/constants/enum'
 import Dropdown from '@/components/Dropdown/index.vue'
 import ThemeSwitch from './ThemeSwitch.vue'
 import { IconTabType, NormalTabType } from '@/types/app'
@@ -50,7 +50,8 @@ const normalClick = (tab: NormalTabType, index: number) => {
       </div>
       <!-- 图标按钮 -->
       <div class="icon" v-else-if="tab.type === TabTypeEnum.ICON" @click="iconClick(tab, index)">
-        <img :src="tab.icon" />
+        <img v-if="tab.iconType === IconTypeEnum.IMG" :src="tab.icon" />
+        <div v-else-if="tab.iconType === IconTypeEnum.CLASS" text-3xl :class="tab.icon"></div>
       </div>
       <!-- 下拉菜单 -->
       <template v-else-if="tab.type === TabTypeEnum.DROPDOWN">
