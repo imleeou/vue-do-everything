@@ -24,7 +24,7 @@ import Menu from './Menu.vue'
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: var(--el-box-shadow);
+  box-shadow: var(--primary-box-shadow);
   .name-item {
     height: 100%;
     display: flex;

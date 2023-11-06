@@ -82,12 +82,12 @@ const handleOption = (tab: NormalTabType) => {
   }
   .options {
     width: 100px;
-    background-color: rgb(124, 124, 124);
+    background-color: var(--primary-background);
     position: absolute;
     left: 50%;
     top: 150%;
     transform: translateX(-50%);
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.12);
+    box-shadow: var(--primary-box-shadow);
     border-radius: 5px;
     overflow: hidden;
     .option {
