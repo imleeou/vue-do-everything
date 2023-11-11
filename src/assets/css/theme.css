@@ -5,12 +5,27 @@ html {
   --top-bar-bg: #fff;
   /* 字体选中颜色 */
   --text-color-active: #81b678;
+
+  /** 滚动条颜色轨道颜色 */
+  --scrollbar-track-color: #fafafa;
+  /* 滚动条滑块颜色 */
+  --scrollbar-thumb-color: #eeeeee;
+  /* 滚动条滑块:hover颜色 */
+  --scrollbar-thumb-hover-color: #eeeeee90;
 }
 
 html.dark {
   --primary-background: #333;
   --primary-box-shadow: 0px 5px 15px 0px rgba(225, 225, 225, 0.2);
-  
+
   --top-bar-bg: #333;
+  /* 字体选中颜色 */
   --text-color-active: #c1ffb6;
+
+  /** 滚动条颜色轨道颜色 */
+  --scrollbar-track-color: #2a2a2a;
+  /* 滚动条滑块颜色 */
+  --scrollbar-thumb-color: #888888;
+  /* 滚动条滑块:hover颜色 */
+  --scrollbar-thumb-hover-color: #88888890;
 }
