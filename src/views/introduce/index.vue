@@ -2,22 +2,36 @@
 
 <template>
   <div class="introduce" pt-12>
-    <article w="2/3" mx-auto my-0>
-      <h1>Nice to meet you!</h1>
-      <p>👋 Hi, I’m @imleeou.</p>
-      <p>👀 The avatar you see is me.</p>
-      <p>👨‍💻 A front-end development engineer.</p>
-      <p>🏠 Currently residing in Henan, China.</p>
-    </article>
+    <div w="2/3" mx-auto my-0>
+      <div class="card">
+        <div w-50 rounded-full overflow-hidden>
+          <img wh-full src="https://avatars.githubusercontent.com/u/70753359?v=4" alt="avatar" />
+        </div>
+        <article ml-10>
+          <h1>Nice to meet you!</h1>
+          <p>👋 Hi, I am @imleeou.</p>
+          <p>👀 The avatar you see is me.</p>
+          <p>👨‍💻 A front-end development engineer.</p>
+          <p>🏠 Currently residing in Henan, China.</p>
+        </article>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped lang="less">
 .introduce {
   p {
-    margin: 1em 0;
-    line-height: 1.75;
-    color: #555;
+    @apply my-4 leading-relaxed text-gray-700;
+  }
+  .card {
+    @apply flex-center shadow-lg py-5;
+  }
+}
+
+@screen lt-sm {
+  .card {
+    @apply flex-col;
   }
 }
 </style>

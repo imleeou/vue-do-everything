@@ -1,5 +1,5 @@
 // uno.config.ts
-import { defineConfig, presetUno, presetIcons, presetAttributify, presetWebFonts } from 'unocss'
+import { defineConfig, presetUno, presetIcons, presetAttributify, presetWebFonts, transformerDirectives } from 'unocss'
 
 export default defineConfig({
   rules: [],
@@ -24,7 +24,9 @@ export default defineConfig({
       }
     })
   ],
+  transformers: [transformerDirectives()],
   shortcuts: {
-    'wh-full': 'w-full h-full'
+    'wh-full': 'w-full h-full',
+    'flex-center': 'flex items-center justify-center'
   }
 })
