@@ -17,6 +17,7 @@
   p {
     margin: 1em 0;
     line-height: 1.75;
+    color: #555;
   }
 }
 </style>

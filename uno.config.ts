@@ -1,10 +1,16 @@
 // uno.config.ts
-import { defineConfig, presetUno, presetIcons, presetAttributify } from 'unocss'
+import { defineConfig, presetUno, presetIcons, presetAttributify, presetWebFonts } from 'unocss'
 
 export default defineConfig({
   rules: [],
   presets: [
     presetUno(),
+    presetWebFonts({
+      provider: 'google',
+      fonts: {
+        sans: ['Inter', 'Roboto']
+      }
+    }),
     presetAttributify(),
     presetIcons({
       prefix: 'i-',
