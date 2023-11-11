@@ -14,8 +14,8 @@ export const TABS: TabType[] = [
     type: TabTypeEnum.DROPDOWN,
     children: [
       {
-        path: '/game',
-        name: '游戏',
+        path: '/feature/loading',
+        name: '加载',
         type: TabTypeEnum.NORMAL
       },
       {
