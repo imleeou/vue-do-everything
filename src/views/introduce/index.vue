@@ -4,7 +4,7 @@
   <div class="introduce" pt-12>
     <div w="2/3" mx-auto my-0>
       <div class="card">
-        <div w-50 rounded-full overflow-hidden>
+        <div w-50 h-50 rounded-full overflow-hidden>
           <img wh-full src="https://avatars.githubusercontent.com/u/70753359?v=4" alt="avatar" />
         </div>
         <article ml-10>
