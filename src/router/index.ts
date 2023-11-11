@@ -3,6 +3,11 @@ import feature from './feature'
 let routes = <RouteRecordRaw[]>[
   {
     path: '/',
+    name: 'Introduce',
+    component: () => import('@/views/introduce/index.vue')
+  },
+  {
+    path: '/home',
     name: 'Home',
     meta: {
       showLayout: true

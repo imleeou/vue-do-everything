@@ -17,5 +17,8 @@ export default defineConfig({
         'vertical-align': 'middle'
       }
     })
-  ]
+  ],
+  shortcuts: {
+    'wh-full': 'w-full h-full'
+  }
 })
