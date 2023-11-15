@@ -17,7 +17,7 @@ import Menu from './Menu.vue'
 <style scoped lang="less">
 .top-bar {
   width: 100%;
-  height: 60px;
+  height: @top-bar-height;
   background-color: var(--top-bar-bg);
   color: var(--el-text-color-primary);
   padding: 0 20px;

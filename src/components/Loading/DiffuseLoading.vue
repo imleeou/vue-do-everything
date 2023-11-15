@@ -23,7 +23,7 @@ const loadingStyle = computed(() => {
 </script>
 
 <template>
-  <div :class="['diffuse-loading', full && 'full']" flex-center>
+  <div :class="['diffuse-loading', full && 'full']" wh-full flex-center>
     <div class="core" :style="loadingStyle">
       <div class="core-inner" v-for="n in 4" :key="n" :style="{ '--n': n }">
         <span

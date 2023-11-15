@@ -7,11 +7,18 @@ const route = useRoute()
 <template>
   <template v-if="route.meta.showLayout">
     <TopBar></TopBar>
-    <slot></slot>
+    <div class="content">
+      <slot></slot>
+    </div>
   </template>
   <template v-else>
     <slot></slot>
   </template>
 </template>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.content {
+  width: 100%;
+  height: calc(100vh - @top-bar-height);
+}
+</style>
