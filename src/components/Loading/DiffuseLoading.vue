@@ -1,77 +1,92 @@
 <script setup lang="ts">
-/** 点点数量 */
-const COUNT = 10
-/** 圈数 */
-const ROUND = 4
+import { computed } from 'vue'
 
-const getPathStyle = (index: number, roundIndex: number) => {
-  return {
-    transform: `rotate(calc(${index} * ${360 / COUNT}deg))`,
-    animationDelay: `${(roundIndex - 1) * 1}s`
+const props = withDefaults(
+  defineProps<{
+    /** 是否全屏loading */
+    full?: boolean
+    /** 辐射半径 */
+    size?: number
+  }>(),
+  {
+    full: false,
+    size: 80
   }
-}
+)
+
+const loadingStyle = computed(() => {
+  return {
+    width: `${props.size}px`,
+    height: `${props.size}px`
+  }
+})
 </script>
 
 <template>
-  <div class="diffuse-loading" wh-full flex-center>
-    <div class="core">
-      <ul class="content" v-for="num in ROUND" :key="num">
-        <li class="path" :style="getPathStyle(index, num)" v-for="index in COUNT" :key="index"></li>
-      </ul>
+  <div :class="['diffuse-loading', full && 'full']" flex-center>
+    <div class="core" :style="loadingStyle">
+      <div class="core-inner" v-for="n in 4" :key="n" :style="{ '--n': n }">
+        <span
+          v-for="index in 20"
+          :key="index"
+          :style="{ '--i': index, '--size': props.size + 'px', left: `-${props.size}px` }"
+        ></span>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="less">
-@keyframes dotAni {
+@keyframes animate {
   0% {
+    transform: scale(1);
+    opacity: 0;
+    left: 100%;
+  }
+
+  10% {
     opacity: 1;
-    right: -0.75rem;
-    width: 1.5rem;
-    height: 1.5rem;
   }
+
+  80% {
+    opacity: 1;
+  }
+
   100% {
-    opacity: 0.5;
-    right: 5.75rem;
-    width: 0;
-    height: 0;
+    transform: scale(0);
+    opacity: 1;
+    left: 0;
   }
 }
-
-@keyframes contentRotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 .diffuse-loading {
   .core {
-    @apply w-40 h-40 list-none relative flex-center;
-    .content {
-      @apply wh-full origin-center list-none;
-      .path {
-        @apply w-20 h-1 origin-right  absolute left-0 top-1/2;
-      }
-      .path::after {
-        content: '';
-        // @apply w-4 h-4 rounded-full bg-lime-200 block content-none;
-        width: 1.5rem;
-        height: 1.5rem;
-        content: '';
-        display: inline-block;
-        border-radius: 100%;
-        background-color: #87d0f5;
-        position: absolute;
-        right: -0.75rem;
-        top: 50%;
-        transform: translateY(-50%);
-        animation: dotAni 3s linear infinite forwards;
-        animation-delay: inherit;
+    @apply relative flex-center;
+    .core-inner {
+      @apply relative;
+      transform: rotate(calc(var(--n) * 45deg));
+      > span {
+        @apply h-1 inline-block absolute origin-right top-0;
+        width: var(--size);
+        transform: rotate(calc(var(--i) * 18deg));
+        &::before {
+          content: '';
+          display: block;
+          width: 10%;
+          height: calc(var(--size) * 0.1);
+          background-color: var(--theme-color);
+          border-radius: 100%;
+          box-shadow: 0 0 10px var(--theme-color), 0 0 20px var(--theme-color), 0 0 40px var(--theme-color),
+            0 0 60px var(--theme-color), 0 0 80px var(--theme-color), 0 0 100px var(--theme-color);
+          animation: animate 5s linear infinite;
+          animation-delay: calc(-0.5s * var(--i));
+          position: absolute;
+          left: 0;
+        }
       }
     }
+  }
+  &.full {
+    @apply wh-screen fixed top-0 left-0 z-1000;
   }
 }
 </style>

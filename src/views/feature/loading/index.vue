@@ -3,7 +3,7 @@ import DiffuseLoading from '@/components/Loading/DiffuseLoading.vue'
 </script>
 
 <template>
-  <DiffuseLoading></DiffuseLoading>
+  <DiffuseLoading full></DiffuseLoading>
 </template>
 
 <style scoped lang="less"></style>

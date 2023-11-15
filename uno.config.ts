@@ -26,7 +26,8 @@ export default defineConfig({
   ],
   transformers: [transformerDirectives()],
   shortcuts: {
-    'wh-full': 'w-full h-full',
+    'wh-full':'w-full h-full',
+    'wh-screen':'w-screen h-screen',
     'flex-center': 'flex items-center justify-center'
   }
 })
