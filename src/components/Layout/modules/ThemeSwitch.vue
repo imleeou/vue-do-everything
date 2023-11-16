@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { nextTick } from 'vue'
 import { Sunny, Moon } from '@element-plus/icons-vue'
 import { useDark, useToggle } from '@vueuse/core'
 
@@ -6,6 +7,45 @@ const isDark = useDark({
   disableTransition: false
 })
 const toggleDark = useToggle(isDark)
+
+/** 过渡动画 */
+let resolveFn: (value: boolean | PromiseLike<boolean>) => void
+const switchClick = (event: MouseEvent) => {
+  const isAppearanceTransition =
+    // @ts-expect-error
+    document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (!isAppearanceTransition || !event) {
+    resolveFn(true)
+    return
+  }
+  const x = event.clientX
+  const y = event.clientY
+  const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
+  // @ts-expect-error: Transition API
+  const transition = document.startViewTransition(async () => {
+    resolveFn(true)
+    await nextTick()
+  })
+  transition.ready.then(() => {
+    const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`]
+    document.documentElement.animate(
+      {
+        clipPath: isDark.value ? [...clipPath].reverse() : clipPath
+      },
+      {
+        duration: 400,
+        easing: 'ease-in',
+        pseudoElement: isDark.value ? '::view-transition-old(root)' : '::view-transition-new(root)'
+      }
+    )
+  })
+}
+
+const beforeChange = (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    resolveFn = resolve
+  })
+}
 </script>
 
 <template>
@@ -15,6 +55,8 @@ const toggleDark = useToggle(isDark)
     inline-prompt
     :active-icon="Moon"
     :inactive-icon="Sunny"
+    :before-change="beforeChange"
+    @click="switchClick"
     @change="toggleDark"
   ></el-switch>
 </template>
