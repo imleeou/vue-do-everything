@@ -10,7 +10,7 @@ export const TABS: TabType[] = [
     type: TabTypeEnum.NORMAL
   },
   {
-    name: '小玩意',
+    name: '没事找事',
     type: TabTypeEnum.DROPDOWN,
     children: [
       {
