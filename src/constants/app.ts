@@ -15,13 +15,15 @@ export const TABS: TabType[] = [
     children: [
       {
         path: '/feature/loading',
-        name: '加载',
-        type: TabTypeEnum.NORMAL
+        name: '加载'
       },
       {
         path: '/feature/randomName',
-        name: '随机点名',
-        type: TabTypeEnum.NORMAL
+        name: '随机点名'
+      },
+      {
+        path: '/feature/gluttonousSnake',
+        name: '贪吃蛇'
       }
     ]
   },
