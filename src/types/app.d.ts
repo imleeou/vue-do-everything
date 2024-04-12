@@ -3,7 +3,7 @@ import { TabTypeEnum, IconTypeEnum } from '@/constants/enum'
 interface NormalTabType {
   path: string
   name: string
-  type: TabTypeEnum.NORMAL
+  type?: TabTypeEnum.NORMAL
 }
 /** icon tab */
 interface IconTabType {

@@ -43,7 +43,7 @@ const normalClick = (tab: NormalTabType, index: number) => {
       <!-- 普通文本按钮 -->
       <div
         :class="['normal', activeIndex === index && 'active-normal']"
-        v-if="tab.type === TabTypeEnum.NORMAL"
+        v-if="!tab.type || tab.type === TabTypeEnum.NORMAL"
         @click="normalClick(tab, index)"
       >
         {{ tab.name }}
