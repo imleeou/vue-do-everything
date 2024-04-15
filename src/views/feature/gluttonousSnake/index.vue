@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, computed } from 'vue'
+import { onMounted, ref, reactive, onUnmounted } from 'vue'
 import { WIDTH, HEIGHT, DirectionEnum, GameStatusEnum, DIAMETER } from './constants'
+import { getRandomInt } from './utils'
 
 /** X轴最大坐标 */
 const MaxX = WIDTH - DIAMETER,
@@ -12,17 +13,22 @@ const direction = ref(DirectionEnum.RIGHT),
   /** 当前游戏状态 */
   gameStatus = ref(GameStatusEnum.PENDING),
   /** 食物位置 */
-  foodPosition = reactive({ x: 690, y: 0 })
+  foodPosition = reactive({ x: getRandomInt(MaxX), y: getRandomInt(maxY) }),
+  /** 蛇头位置 */
+  snakeHeadPosition = reactive({ x: getRandomInt(MaxX), y: getRandomInt(maxY) }),
+  /** 得分/蛇蛇的长度 */
+  score = ref(0),
+  /** 更新计时器 */
+  timer = ref(),
+  /** 计时器频率/ 游戏难度 / 行进速度 */
+  speed = 200
 
-/** 食物样式 */
-const foodStyle = computed(() => {
-  return {
-    width: `${DIAMETER}px`,
-    height: `${DIAMETER}px`,
-    top: `${foodPosition.y}px`,
-    left: ` ${foodPosition.x}px`
-  }
-})
+/** 食物和蛇身直径 */
+const bodyStyle = {
+  width: `${DIAMETER}px`,
+  height: `${DIAMETER}px`,
+  transitionDuration: speed + 'ms'
+}
 
 /** 处理按下空格键 */
 const handlePressSpace = () => {
@@ -30,12 +36,15 @@ const handlePressSpace = () => {
   switch (gameStatus.value) {
     case GameStatusEnum.PENDING:
       gameStatus.value = GameStatusEnum.RUNNING
+      start()
       break
     case GameStatusEnum.RUNNING:
       gameStatus.value = GameStatusEnum.PAUSED
+      paused()
       break
     case GameStatusEnum.PAUSED:
       gameStatus.value = GameStatusEnum.RUNNING
+      start()
       break
     case GameStatusEnum.FINISHED:
       gameStatus.value = GameStatusEnum.PENDING
@@ -43,6 +52,42 @@ const handlePressSpace = () => {
     default:
       break
   }
+}
+
+/** 清除计时器 */
+const clearTimer = () => {
+  clearInterval(timer.value)
+  timer.value = undefined
+}
+
+/** 开始游戏 */
+const start = () => {
+  timer.value = setInterval(() => {
+    console.log('计时器执行', direction.value)
+    // 更新位置
+    switch (direction.value) {
+      case DirectionEnum.UP:
+        snakeHeadPosition.y -= DIAMETER
+        break
+      case DirectionEnum.DOWN:
+        snakeHeadPosition.y += DIAMETER
+        break
+      case DirectionEnum.LEFT:
+        snakeHeadPosition.x -= DIAMETER
+        break
+      case DirectionEnum.RIGHT:
+        snakeHeadPosition.x += DIAMETER
+        break
+      default:
+        break
+    }
+    console.log('更新后的位置->', snakeHeadPosition.x, snakeHeadPosition.y)
+  }, speed)
+}
+
+/** 暂停游戏 */
+const paused = () => {
+  clearTimer()
 }
 
 /** 更改行进方向 */
@@ -54,7 +99,6 @@ const updateDirection = (dir: DirectionEnum) => {
 onMounted(() => {
   document.addEventListener('keydown', (event) => {
     const controlKeys = Object.values(DirectionEnum)
-    console.log('event', event)
     // 按下空格键
     if (event.code === 'Space') {
       handlePressSpace()
@@ -62,6 +106,10 @@ onMounted(() => {
       updateDirection(event.code as DirectionEnum)
     }
   })
+})
+
+onUnmounted(() => {
+  clearTimer()
 })
 </script>
 
@@ -86,16 +134,52 @@ onMounted(() => {
         flex-center
         class="bg-black/40 z-[9999]"
       >
+        <!-- 未开始 -->
         <template v-if="gameStatus === GameStatusEnum.PENDING">
           <p text-center>
             按空格键（<span class="key-board" w-10><i class="i-mdi-keyboard-space" /></span>）开始游戏
           </p>
         </template>
+        <!-- 暂停 -->
+        <template v-if="gameStatus === GameStatusEnum.PAUSED">
+          <p text-center>游戏暂停</p>
+        </template>
+        <!-- 结束 -->
+        <template v-if="gameStatus === GameStatusEnum.FINISHED">
+          <p text-center>游戏结束</p>
+        </template>
       </div>
       <!-- 游戏内容 -->
       <div wh-full>
         <!-- 食物 -->
-        <div rounded absolute bg-red-500 :style="foodStyle"></div>
+        <div
+          rounded-full
+          absolute
+          bg-red-500
+          :style="{ ...bodyStyle, top: `${foodPosition.y}px`, left: `${foodPosition.x}px` }"
+        ></div>
+        <!-- 蛇 -->
+        <ul list-none>
+          <li
+            rounded-full
+            absolute
+            bg-blue-500
+            class="snake-body"
+            :style="{ ...bodyStyle, top: `${snakeHeadPosition.y}px`, left: `${snakeHeadPosition.x}px` }"
+          ></li>
+          <template v-if="score">
+            <li
+              v-for="index in score"
+              :key="index"
+              class="snake-body"
+              :style="{
+                ...bodyStyle,
+                top: `${snakeHeadPosition.y + index * DIAMETER}px`,
+                left: `${snakeHeadPosition.x + index * DIAMETER}px`
+              }"
+            ></li>
+          </template>
+        </ul>
       </div>
     </div>
   </div>
@@ -112,5 +196,10 @@ onMounted(() => {
   height: 18px;
   line-height: 18px;
   text-align: center;
+}
+
+.snake-body {
+  transition: all;
+  transition-timing-function: linear;
 }
 </style>
