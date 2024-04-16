@@ -16,11 +16,11 @@ const direction = ref(DirectionEnum.RIGHT),
   foodPosition = reactive({ x: getRandomInt(MaxX), y: getRandomInt(maxY) }),
   /** 蛇头位置 */
   snakeHeadPosition = reactive({ x: getRandomInt(MaxX), y: getRandomInt(maxY) }),
-  /** 得分/蛇蛇的长度 */
+  /** 得分 / 蛇蛇的长度 */
   score = ref(0),
   /** 更新计时器 */
   timer = ref(),
-  /** 计时器频率/ 游戏难度 / 行进速度 */
+  /** 计时器频率 / 游戏难度 / 行进速度 */
   speed = 200
 
 /** 食物和蛇身直径 */
@@ -32,7 +32,6 @@ const bodyStyle = {
 
 /** 处理按下空格键 */
 const handlePressSpace = () => {
-  console.log('handlePressSpace')
   switch (gameStatus.value) {
     case GameStatusEnum.PENDING:
       gameStatus.value = GameStatusEnum.RUNNING
@@ -60,6 +59,12 @@ const clearTimer = () => {
   timer.value = undefined
 }
 
+/** 生成食物 */
+const generateFood = () => {
+  foodPosition.x = getRandomInt(MaxX)
+  foodPosition.y = getRandomInt(maxY)
+}
+
 /** 开始游戏 */
 const start = () => {
   timer.value = setInterval(() => {
@@ -81,8 +86,36 @@ const start = () => {
       default:
         break
     }
+
+    // 检查是否碰壁
+    if (checkCollision()) {
+      gameStatus.value = GameStatusEnum.FINISHED
+      clearTimer()
+      return
+    }
+
+    // 检查是否吃到食物
+    if (snakeHeadPosition.x === foodPosition.x && snakeHeadPosition.y === foodPosition.y) {
+      // 吃到食物，加长蛇身
+      score.value += 1
+      // 重新生成食物
+      generateFood()
+    }
+
     console.log('更新后的位置->', snakeHeadPosition.x, snakeHeadPosition.y)
   }, speed)
+}
+
+/** 检查蛇头是否碰壁或者碰到身体 */
+const checkCollision = (): boolean => {
+  // 是否碰壁？
+  if (snakeHeadPosition.x < 0 || snakeHeadPosition.x > MaxX || snakeHeadPosition.y < 0 || snakeHeadPosition.y > maxY) {
+    return true
+  }
+  // 是否碰到身体？ 
+  //TODO： 改造数据保存
+
+  return false
 }
 
 /** 暂停游戏 */
