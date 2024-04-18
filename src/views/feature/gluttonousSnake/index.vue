@@ -24,7 +24,9 @@ const direction = ref(DIRS[Math.floor(Math.random() * DIRS.length)]),
   /** 更新计时器 */
   timer = ref(),
   /** 计时器频率 / 游戏难度 / 行进速度 */
-  speed = 100
+  speed = 100,
+  /** 游戏总时间，单位：毫秒 */
+  totalTime = ref(0)
 
 /** 食物和蛇身直径 */
 const bodyStyle = {
@@ -35,6 +37,15 @@ const bodyStyle = {
 
 /** 蛇头位置 */
 const snakeHeadPosition = computed(() => snakeBodyData.value[0])
+
+/** 将总时长(毫秒)转换为 分秒 */
+const formatTotalTime = computed(() => {
+  const totalSeconds = Math.floor(totalTime.value / 1000)
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+})
+
 /** 重置游戏数据 */
 const resetGame = () => {
   // 方向重置为任意值
@@ -45,6 +56,8 @@ const resetGame = () => {
   foodPosition.value = { ...generatePosition() }
   // 得分重置
   score.value = 0
+  // 总时长重置
+  totalTime.value = 0
 }
 
 /** 处理按下空格键 */
@@ -148,7 +161,8 @@ const start = () => {
       })
     }
 
-    // console.log('更新后的位置->', snakeHeadPosition.value.x, snakeHeadPosition.value.y)
+    // 更新游戏时间
+    totalTime.value += speed
   }, speed)
 }
 
@@ -211,12 +225,17 @@ onUnmounted(() => {
 <template>
   <div wh-full flex-center flex-col>
     <!-- 说明 -->
-    <header text-center>
-      <!--   <p>控制：⬆️⬇️⬅️➡️</p>
-      <p m-2>
-        空格键（<span class="key-board" w-10><i class="i-mdi-keyboard-space" /></span>）：开始/暂停/继续
-      </p> -->
-      {{ score }}
+    <header text-center :style="{ width: `${WIDTH}px` }" my-2>
+      <div flex justify-between items-center>
+        <p>⬆️⬇️⬅️➡️：上下左右</p>
+        <p m-2>
+          <span class="key-board" w-10><i class="i-mdi-keyboard-space" /></span>：开始/暂停/继续
+        </p>
+      </div>
+      <div flex justify-between>
+        <p>游戏时间：{{ formatTotalTime }}</p>
+        <p>得分：{{ score }}</p>
+      </div>
     </header>
     <!-- 游戏窗口 -->
     <div :style="{ width: `${WIDTH}px`, height: `${HEIGHT}px` }" relative box-content border="1 solid black">
