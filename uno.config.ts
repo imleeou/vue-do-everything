@@ -16,7 +16,8 @@ export default defineConfig({
       prefix: 'i-',
       collections: {
         ep: () => import('@iconify-json/ep/icons.json').then((i) => i.default),
-        carbon: () => import('@iconify-json/carbon/icons.json').then((i) => i.default)
+        carbon: () => import('@iconify-json/carbon/icons.json').then((i) => i.default),
+        mdi: () => import('@iconify-json/mdi/icons.json').then((i) => i.default)
       },
       extraProperties: {
         display: 'inline-block',

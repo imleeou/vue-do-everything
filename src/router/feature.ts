@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
         name: 'RandomName',
         component: () => import('@/views/feature/randomName/index.vue'),
         meta: {
-          title: '功能'
+          title: '随机点名'
         }
       },
       {
@@ -22,6 +22,14 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/feature/loading/index.vue'),
         meta: {
           title: '加载'
+        }
+      },
+      {
+        path: 'gluttonousSnake',
+        name: 'GluttonousSnake',
+        component: () => import('@/views/feature/gluttonousSnake/index.vue'),
+        meta: {
+          title: '贪吃蛇'
         }
       }
     ]
