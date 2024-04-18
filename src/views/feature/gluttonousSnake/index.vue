@@ -103,7 +103,6 @@ const generatePosition = () => {
 const updatePosition = () => {
   // 旧的头部位置
   const oldHeadPosition = { ...snakeBodyData.value[0] }
-  // 保存一份新的头部位置
   switch (direction.value) {
     case DirectionEnum.UP:
       oldHeadPosition.y -= DIAMETER
@@ -119,6 +118,13 @@ const updatePosition = () => {
       break
     default:
       break
+  }
+
+  // 检查是否碰壁或碰到身体
+  if (checkCollision(oldHeadPosition)) {
+    gameStatus.value = GameStatusEnum.FINISHED
+    clearTimer()
+    throw new Error('Game Over')
   }
 
   // 蛇身位置更新
@@ -141,13 +147,6 @@ const start = () => {
     // 更新位置
     updatePosition()
 
-    // 检查是否碰壁
-    if (checkCollision()) {
-      gameStatus.value = GameStatusEnum.FINISHED
-      clearTimer()
-      return
-    }
-
     // 检查是否吃到食物
     if (snakeHeadPosition.value.x === foodPosition.value.x && snakeHeadPosition.value.y === foodPosition.value.y) {
       // 重新生成食物
@@ -159,26 +158,20 @@ const start = () => {
         uuid: getUUID()
       })
     }
-
     // 更新游戏时间
     totalTime.value += speed
   }, speed)
 }
 
 /** 检查蛇头是否碰壁或者碰到身体 */
-const checkCollision = (): boolean => {
+const checkCollision = (position: SnakeDataType): boolean => {
   // 是否碰壁？
-  if (
-    snakeHeadPosition.value.x < 0 ||
-    snakeHeadPosition.value.x > MaxX ||
-    snakeHeadPosition.value.y < 0 ||
-    snakeHeadPosition.value.y > maxY
-  ) {
+  if (position.x < 0 || position.x > MaxX || position.y < 0 || position.y > maxY) {
     return true
   }
   // 是否碰到身体？
   const bodyCollision = snakeBodyData.value.find(
-    (body, index) => index !== 0 && body.x === snakeHeadPosition.value.x && body.y === snakeHeadPosition.value.y
+    (body, index) => index !== 0 && body.x === position.x && body.y === position.y
   )
 
   return !!bodyCollision
