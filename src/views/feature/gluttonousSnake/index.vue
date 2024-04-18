@@ -197,20 +197,24 @@ const updateDirection = (dir: DirectionEnum) => {
   direction.value = dir
 }
 
+/** 处理keydown事件 */
+const handleKeyDown = (event: KeyboardEvent) => {
+  const controlKeys = Object.values(DirectionEnum)
+  // 按下空格键
+  if (event.code === 'Space') {
+    handlePressSpace()
+  } else if (controlKeys.includes(event.code as DirectionEnum)) {
+    updateDirection(event.code as DirectionEnum)
+  }
+}
+
 onMounted(() => {
-  document.addEventListener('keydown', (event) => {
-    const controlKeys = Object.values(DirectionEnum)
-    // 按下空格键
-    if (event.code === 'Space') {
-      handlePressSpace()
-    } else if (controlKeys.includes(event.code as DirectionEnum)) {
-      updateDirection(event.code as DirectionEnum)
-    }
-  })
+  document.addEventListener('keydown', handleKeyDown)
 })
 
 onUnmounted(() => {
   clearTimer()
+  document.removeEventListener('keydown', handleKeyDown)
 })
 </script>
 
