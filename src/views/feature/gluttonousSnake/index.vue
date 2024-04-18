@@ -278,8 +278,10 @@ onUnmounted(() => {
             v-for="(body, index) in snakeBodyData"
             rounded-full
             absolute
+            transition-all
+            ease-linear
             :key="body.uuid"
-            :class="['snake-body', index === 0 ? 'bg-blue-500' : 'bg-gray-300']"
+            :class="[!index ? 'bg-blue-500 z-10' : 'bg-gray-300']"
             :style="{
               ...bodyStyle,
               top: `${body.y}px`,
@@ -303,10 +305,5 @@ onUnmounted(() => {
   height: 18px;
   line-height: 18px;
   text-align: center;
-}
-
-.snake-body {
-  transition: all;
-  transition-timing-function: linear;
 }
 </style>
