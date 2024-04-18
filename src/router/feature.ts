@@ -29,8 +29,7 @@ const routes: RouteRecordRaw[] = [
         name: 'GluttonousSnake',
         component: () => import('@/views/feature/gluttonousSnake/index.vue'),
         meta: {
-          title: '贪吃蛇',
-          showLayout: false
+          title: '贪吃蛇'
         }
       }
     ]
