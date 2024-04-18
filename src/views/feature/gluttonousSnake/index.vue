@@ -19,8 +19,6 @@ const direction = ref(DIRS[Math.floor(Math.random() * DIRS.length)]),
   foodPosition = ref({ x: getRandomInt(MaxX), y: getRandomInt(maxY) }),
   /** 蛇蛇数据 */
   snakeBodyData = ref<SnakeDataType[]>([{ x: getRandomInt(MaxX), y: getRandomInt(maxY), uuid: getUUID() }]),
-  /** 得分 / 蛇蛇的长度 */
-  score = ref(0),
   /** 更新计时器 */
   timer = ref(),
   /** 计时器频率 / 游戏难度 / 行进速度 */
@@ -46,6 +44,11 @@ const formatTotalTime = computed(() => {
   return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
 })
 
+/** 得分 */
+const score = computed(() => {
+  return snakeBodyData.value.length - 1
+})
+
 /** 重置游戏数据 */
 const resetGame = () => {
   // 方向重置为任意值
@@ -54,8 +57,6 @@ const resetGame = () => {
   snakeBodyData.value = [{ x: getRandomInt(MaxX), y: getRandomInt(maxY), uuid: getUUID() }]
   // 食物位置重置
   foodPosition.value = { ...generatePosition() }
-  // 得分重置
-  score.value = 0
   // 总时长重置
   totalTime.value = 0
 }
@@ -149,8 +150,6 @@ const start = () => {
 
     // 检查是否吃到食物
     if (snakeHeadPosition.value.x === foodPosition.value.x && snakeHeadPosition.value.y === foodPosition.value.y) {
-      // 吃到食物，得分加一
-      score.value += 1
       // 重新生成食物
       foodPosition.value = { ...generatePosition() }
       // 增加蛇身
@@ -275,13 +274,6 @@ onUnmounted(() => {
         ></div>
         <!-- 蛇 -->
         <ul list-none>
-          <!-- <li
-            rounded-full
-            absolute
-            bg-blue-500
-            class="snake-body"
-            :style="{ ...bodyStyle, top: `${snakeHeadPosition.y}px`, left: `${snakeHeadPosition.x}px` }"
-          ></li> -->
           <li
             v-for="(body, index) in snakeBodyData"
             rounded-full
