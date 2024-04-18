@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref, reactive, onUnmounted, computed } from 'vue'
-import { WIDTH, HEIGHT, DirectionEnum, GameStatusEnum, DIAMETER } from './constants'
+import { onMounted, ref, onUnmounted, computed } from 'vue'
+import { WIDTH, HEIGHT, DirectionEnum, GameStatusEnum, DIAMETER, SPEED } from './constants'
 import { getRandomInt, getUUID } from './utils'
 import type { SnakeDataType } from './types'
+import { useKeyboardLongPress, BehaviorEnum } from '@/hooks/useKeyboardLongPress'
 
 /** X轴最大坐标 */
 const MaxX = WIDTH - DIAMETER,
@@ -22,7 +23,7 @@ const direction = ref(DIRS[Math.floor(Math.random() * DIRS.length)]),
   /** 更新计时器 */
   timer = ref(),
   /** 计时器频率 / 游戏难度 / 行进速度 */
-  speed = 100,
+  speed = ref(SPEED),
   /** 游戏总时间，单位：毫秒 */
   totalTime = ref(0)
 
@@ -30,7 +31,7 @@ const direction = ref(DIRS[Math.floor(Math.random() * DIRS.length)]),
 const bodyStyle = {
   width: `${DIAMETER}px`,
   height: `${DIAMETER}px`,
-  transitionDuration: speed + 'ms'
+  transitionDuration: speed.value + 'ms'
 }
 
 /** 蛇头位置 */
@@ -59,6 +60,8 @@ const resetGame = () => {
   foodPosition.value = { ...generatePosition() }
   // 总时长重置
   totalTime.value = 0
+  // 重置速度
+  speed.value = SPEED
 }
 
 /** 处理按下空格键 */
@@ -84,6 +87,17 @@ const handlePressSpace = () => {
       break
   }
 }
+
+/** 处理长按 */
+const handleLongPressKeyDown = (_: string, behavior: BehaviorEnum) => {
+  if (gameStatus.value === GameStatusEnum.RUNNING) {
+    speed.value = behavior === BehaviorEnum.DOWN ? SPEED / 2 : SPEED
+    clearTimer()
+    start()
+  }
+}
+// 监听长按左ctrl键
+useKeyboardLongPress(['ControlLeft'], handleLongPressKeyDown)
 
 /** 清除计时器 */
 const clearTimer = () => {
@@ -149,18 +163,25 @@ const start = () => {
 
     // 检查是否吃到食物
     if (snakeHeadPosition.value.x === foodPosition.value.x && snakeHeadPosition.value.y === foodPosition.value.y) {
-      // 重新生成食物
-      foodPosition.value = { ...generatePosition() }
-      // 增加蛇身
-      snakeBodyData.value.push({
-        x: snakeBodyData.value[snakeBodyData.value.length - 1].x,
-        y: snakeBodyData.value[snakeBodyData.value.length - 1].y,
-        uuid: getUUID()
-      })
+      // 动画执行完毕后再生成食物
+      let timeout: null | NodeJS.Timeout = setTimeout(() => {
+        // 重新生成食物
+        foodPosition.value = { ...generatePosition() }
+        // 增加蛇身
+        snakeBodyData.value.push({
+          x: snakeBodyData.value[snakeBodyData.value.length - 1].x,
+          y: snakeBodyData.value[snakeBodyData.value.length - 1].y,
+          uuid: getUUID()
+        })
+
+        // 清除计时器
+        clearTimeout(timeout as NodeJS.Timeout)
+        timeout = null
+      }, speed.value)
     }
     // 更新游戏时间
-    totalTime.value += speed
-  }, speed)
+    totalTime.value += speed.value
+  }, speed.value)
 }
 
 /** 检查蛇头是否碰壁或者碰到身体 */
@@ -227,6 +248,7 @@ onUnmounted(() => {
         <p m-2>
           <span class="key-board" w-10><i class="i-mdi-keyboard-space" /></span>：开始/暂停/继续
         </p>
+        <p m-2><span class="key-board" w-10>ctrl</span>：长按加速</p>
       </div>
       <div flex justify-between>
         <p>游戏时间：{{ formatTotalTime }}</p>

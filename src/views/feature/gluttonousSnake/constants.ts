@@ -4,6 +4,8 @@ export const WIDTH = 700
 export const HEIGHT = 500
 /** 食物和蛇球体的直径 */
 export const DIAMETER = 10
+/** 计时器频率 / 游戏难度 / 行进速度 */
+export const SPEED = 100
 
 /** 方向枚举 */
 export enum DirectionEnum {
