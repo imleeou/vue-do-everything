@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, onUnmounted, computed } from 'vue'
+import confetti from 'canvas-confetti'
 import { WIDTH, HEIGHT, DirectionEnum, GameStatusEnum, DIAMETER, SPEED } from './constants'
 import { getRandomInt, getUUID } from './utils'
 import type { SnakeDataType } from './types'
@@ -165,6 +166,8 @@ const start = () => {
     if (snakeHeadPosition.value.x === foodPosition.value.x && snakeHeadPosition.value.y === foodPosition.value.y) {
       // 动画执行完毕后再生成食物
       let timeout: null | NodeJS.Timeout = setTimeout(() => {
+        // 庆祝
+        fireConfetti()
         // 重新生成食物
         foodPosition.value = { ...generatePosition() }
         // 增加蛇身
@@ -227,6 +230,22 @@ const handleKeyDown = (event: KeyboardEvent) => {
   } else if (controlKeys.includes(event.code as DirectionEnum)) {
     updateDirection(event.code as DirectionEnum)
   }
+}
+
+/** 发射一波五彩纸屑 */
+const fireConfetti = () => {
+  confetti({
+    origin: {
+      // 0-1 越小越偏左
+      x: 0,
+      // 0-1 越小越偏上
+      y: 0.9
+    },
+    // 发射五彩纸屑的角度，以度为单位。默认90 是直线上升。
+    angle: 45,
+    // 要发射的五彩纸屑的数量，默认50
+    particleCount: 60
+  })
 }
 
 onMounted(() => {
