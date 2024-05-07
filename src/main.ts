@@ -5,9 +5,8 @@ import router from './router'
 import '@unocss/reset/normalize.css'
 // 主题样式
 import 'element-plus/theme-chalk/dark/css-vars.css'
-import '@/assets/css/theme.css'
 // 全局样式
-import '@/assets/css/main.css'
+import '@/assets/css/index.css'
 import 'virtual:uno.css'
 
 const app = createApp(App)
