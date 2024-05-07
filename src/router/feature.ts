@@ -31,6 +31,15 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '贪吃蛇'
         }
+      },
+      {
+        path: 'virtualWaterfallFlow',
+        name: 'VirtualWaterfallFlow',
+        component: () => import('@/views/feature/virtualWaterfallFlow/index.vue'),
+        meta: {
+          title: '虚拟瀑布流',
+          showLayout: false
+        }
       }
     ]
   }
