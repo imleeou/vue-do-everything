@@ -13,3 +13,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* 隐藏元素的滚动条 */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

@@ -14,7 +14,7 @@ export function generateRandomTitle() {
 }
 
 /** 获取文本宽度、高度 */
-export function getTextInfo(text: string, font: string = '16px') {
+export function getTextInfo(text: string, font: string = '16px Inter') {
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
   ctx!.font = font
@@ -28,5 +28,21 @@ export function getTextInfo(text: string, font: string = '16px') {
   return {
     width,
     height
+  }
+}
+
+/** 动态获取列数 */
+export const getColumnNum = () => {
+  const windowWidth = window.innerWidth
+  if (windowWidth >= 1920) {
+    return 6
+  } else if (windowWidth >= 1440) {
+    return 5
+  } else if (windowWidth >= 1024) {
+    return 4
+  } else if (windowWidth >= 768) {
+    return 3
+  } else {
+    return 2
   }
 }
