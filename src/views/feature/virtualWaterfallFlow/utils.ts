@@ -13,8 +13,8 @@ export function generateRandomTitle() {
   return randomTitle
 }
 
-/** 获取文本宽度、高度 */
-export function getTextInfo(text: string, font: string = '16px Inter') {
+/** 获取文本宽度、高度，注意字体大小 */
+export function getTextInfo(text: string, font: string = '14px Inter') {
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
   ctx!.font = font

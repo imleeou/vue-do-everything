@@ -16,6 +16,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
     css: {
       preprocessorOptions: {
         less: {
+          javascriptEnabled: true,
           globalVars: {
             hack: `true;@import '@/assets/css/variable.less'`
           }

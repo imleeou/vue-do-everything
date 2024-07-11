@@ -2,7 +2,8 @@
 export interface WaterfallDataType {
   id: number
   title: string
-  width: number
+  // width: number
+  /** 不包括标题的高度 */
   height: number
   background: string
 }

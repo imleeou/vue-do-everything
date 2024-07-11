@@ -19,12 +19,6 @@ const columnNum = ref(getColumnNum()),
 const getColWidth = () => {
   // 容器宽度
   const containerWidth = containerRef.value?.clientWidth || window.innerWidth
-  console.log(
-    `💡 ~ getColWidth ~ containerWidth -> `,
-    containerRef.value,
-    containerRef.value?.clientWidth,
-    containerWidth
-  )
   return (containerWidth - columnNum.value * columnGap.value) / columnNum.value
 }
 
@@ -38,27 +32,31 @@ const getWaterfallData2D = () => {
   })
   /** 当前列宽 */
   const colWidth = getColWidth()
-
   waterfallData.value.forEach((item) => {
-    // 找到最小的height,若相同则选择最前面的
+    /** 文本区域高度 */
+    const { width } = getTextInfo(item.title)
+    // 文本宽度，加上左右padding 8px
+    const textWidth = width + 8
+    // 超过列宽，添加两行高度
+    const textHeight = textWidth > colWidth ? 50 : 30
+    // 总高度
+    const totalHeight = item.height + textHeight
+
     // 首先查看是否有空列
     const emptyColIndex = result.findIndex((col) => col.height === 0)
+    // 有空列
     if (emptyColIndex >= 0) {
-      const { width } = getTextInfo(item.title)
-      // TODO: 支持动态两行文本高度
-      // 文本宽度，加上padding，检查是否超过列宽，超过列宽添加两行高度
-      const textWidth = width + 8
-      console.log(`💡 ~ waterfallData.value.forEach ~ textWidth -> `, item.title, textWidth)
-      console.log(`💡 ~ multiColumnWaterfallData ~ colWidth -> `, colWidth)
       result[emptyColIndex].data.push(item)
-      result[emptyColIndex].height = item.height
-    } else {
+      result[emptyColIndex].height = totalHeight
+    }
+    // 没有空列，则选择最小高度列
+    else {
       // 找最小的height
       const minHeightColIndex = result.reduce((prev, curr, index) => {
         return curr.height < result[prev].height ? index : prev
       }, 0)
       result[minHeightColIndex].data.push(item)
-      result[minHeightColIndex].height = result[minHeightColIndex].height + item.height
+      result[minHeightColIndex].height = result[minHeightColIndex].height + totalHeight
     }
   })
   return result
@@ -74,11 +72,11 @@ const init = () => {
   waterfallData.value = new Array(100).fill(null).map((_, index) => {
     return {
       id: index + 1,
-      title: `标题${index}：` + generateRandomTitle(),
+      title: `标题${index + 1}：` + generateRandomTitle(),
       background: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(
         Math.random() * 255
       )}, ${Math.floor(Math.random() * 100)}%)`,
-      width: Math.floor(Math.random() * 200) + 100,
+      // width: Math.floor(Math.random() * 200) + 100,
       height: Math.floor(Math.random() * 200) + 100
     }
   })
@@ -113,10 +111,29 @@ onUnmounted(() => {
     >
       <div v-for="item in colArray.data" :key="item.id" w-full>
         <div w-full :style="{ backgroundColor: item.background, height: `${item.height}px` }">{{ item.id }}</div>
-        <p px-1 py-2 bg-gray-100 class="text-ellipsis">{{ item.title }}</p>
+        <div bg-gray-100 class="module-title">
+          <p>{{ item.title }}</p>
+        </div>
       </div>
     </li>
   </ul>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="less">
+.module-title {
+  font-size: 14px;
+
+  line-height: 1.4;
+  min-height: 30px;
+  max-height: 50px;
+  padding: 5px 4px;
+  > p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+  }
+}
+</style>
