@@ -37,16 +37,20 @@ const getColWidth = () => {
 }
 
 /** 将瀑布流源数据处理成二维数据 */
-const getWaterfallData2D = () => {
-  const result: WaterfallData2DType[] = new Array(columnNum.value).fill(null).map(() => {
-    return {
-      height: 0,
-      data: []
-    }
-  })
+const getWaterfallData2D = (newData?: WaterfallDataType[]) => {
+  const result: WaterfallData2DType[] = multiColumnWaterfallData.value.length
+    ? multiColumnWaterfallData.value
+    : new Array(columnNum.value).fill(null).map(() => {
+        return {
+          height: 0,
+          data: []
+        }
+      })
   /** 当前列宽 */
   const colWidth = getColWidth()
-  waterfallData.value.forEach((item) => {
+  /** 需要添加的数据，没传则默认使用waterfallData全量数据 */
+  const handleData = newData ?? waterfallData.value
+  handleData.forEach((item) => {
     /** 文本区域高度 */
     const { width } = getTextInfo(item.title)
     // 文本宽度，加上左右padding 8px
@@ -73,13 +77,13 @@ const getWaterfallData2D = () => {
       result[minHeightColIndex].height = result[minHeightColIndex].height + totalHeight
     }
   })
-  return result
+  multiColumnWaterfallData.value = [...result]
 }
 
 /** 窗口大小发生变化 */
 const windowResize = useDebounceFn(() => {
   columnNum.value = getColumnNum()
-  multiColumnWaterfallData.value = getWaterfallData2D()
+  getWaterfallData2D()
 }, 100)
 
 const loadMoreData = () => {
@@ -96,8 +100,7 @@ const loadMoreData = () => {
     }
   })
   waterfallData.value = [...waterfallData.value, ...newData]
-  multiColumnWaterfallData.value = getWaterfallData2D()
-  console.log('[ waterfallData.value ] >', waterfallData.value)
+  getWaterfallData2D(newData)
 }
 
 const init = () => {
@@ -131,7 +134,9 @@ onUnmounted(() => {
       gap-2
     >
       <div v-for="item in colArray.data" :key="item.id" w-full>
-        <div w-full flex-center :style="{ backgroundColor: item.background, height: `${item.height}px` }">{{ item.id }}</div>
+        <div w-full flex-center :style="{ backgroundColor: item.background, height: `${item.height}px` }">
+          {{ item.id }}
+        </div>
         <div bg-gray-100 class="module-title">
           <p>{{ item.title }}</p>
         </div>
