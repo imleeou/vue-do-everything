@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useDebounceFn } from '@vueuse/core'
+import { ref, onMounted, onUnmounted, toRefs, watch } from 'vue'
+import { useDebounceFn, useScroll } from '@vueuse/core'
 import { WaterfallData2DType, WaterfallDataType } from './types'
 import { generateRandomTitle, getColumnNum, getTextInfo } from './utils'
 
@@ -14,6 +14,20 @@ const columnNum = ref(getColumnNum()),
   multiColumnWaterfallData = ref<WaterfallData2DType[]>([]),
   /** 列间距 */
   columnGap = ref(8)
+
+const { arrivedState } = useScroll(containerRef)
+const { bottom } = toRefs(arrivedState)
+
+watch(
+  () => bottom.value,
+  (value) => {
+    if (value) {
+      console.log('触底了..')
+      // 触底加载数据
+      loadMoreData()
+    }
+  }
+)
 
 /** 获取当前列的宽度 */
 const getColWidth = () => {
@@ -68,11 +82,12 @@ const windowResize = useDebounceFn(() => {
   multiColumnWaterfallData.value = getWaterfallData2D()
 }, 100)
 
-const init = () => {
-  waterfallData.value = new Array(100).fill(null).map((_, index) => {
+const loadMoreData = () => {
+  const newData = new Array(100).fill(null).map((_, index) => {
+    const idx = waterfallData.value.length + index + 1
     return {
-      id: index + 1,
-      title: `标题${index + 1}：` + generateRandomTitle(),
+      id: idx,
+      title: `标题${idx}：` + generateRandomTitle(),
       background: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(
         Math.random() * 255
       )}, ${Math.floor(Math.random() * 100)}%)`,
@@ -80,12 +95,18 @@ const init = () => {
       height: Math.floor(Math.random() * 200) + 100
     }
   })
+  waterfallData.value = [...waterfallData.value, ...newData]
+  multiColumnWaterfallData.value = getWaterfallData2D()
+  console.log('[ waterfallData.value ] >', waterfallData.value)
+}
+
+const init = () => {
+  loadMoreData()
 }
 
 init()
 
 onMounted(() => {
-  multiColumnWaterfallData.value = getWaterfallData2D()
   // 添加窗口resize监听
   window.addEventListener('resize', windowResize)
 })
@@ -110,7 +131,7 @@ onUnmounted(() => {
       gap-2
     >
       <div v-for="item in colArray.data" :key="item.id" w-full>
-        <div w-full :style="{ backgroundColor: item.background, height: `${item.height}px` }">{{ item.id }}</div>
+        <div w-full flex-center :style="{ backgroundColor: item.background, height: `${item.height}px` }">{{ item.id }}</div>
         <div bg-gray-100 class="module-title">
           <p>{{ item.title }}</p>
         </div>
