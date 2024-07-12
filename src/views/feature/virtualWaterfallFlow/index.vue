@@ -38,14 +38,15 @@ const getColWidth = () => {
 
 /** 将瀑布流源数据处理成二维数据 */
 const getWaterfallData2D = (newData?: WaterfallDataType[]) => {
-  const result: WaterfallData2DType[] = multiColumnWaterfallData.value.length
-    ? multiColumnWaterfallData.value
-    : new Array(columnNum.value).fill(null).map(() => {
-        return {
-          height: 0,
-          data: []
-        }
-      })
+  const result: WaterfallData2DType[] =
+    multiColumnWaterfallData.value.length && multiColumnWaterfallData.value.length === columnNum.value
+      ? multiColumnWaterfallData.value
+      : new Array(columnNum.value).fill(null).map(() => {
+          return {
+            height: 0,
+            data: []
+          }
+        })
   /** 当前列宽 */
   const colWidth = getColWidth()
   /** 需要添加的数据，没传则默认使用waterfallData全量数据 */
@@ -83,6 +84,7 @@ const getWaterfallData2D = (newData?: WaterfallDataType[]) => {
 /** 窗口大小发生变化 */
 const windowResize = useDebounceFn(() => {
   columnNum.value = getColumnNum()
+  console.log('windowResize', columnNum.value)
   getWaterfallData2D()
 }, 100)
 
