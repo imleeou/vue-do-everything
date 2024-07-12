@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, toRefs, watch } from 'vue'
 import { useDebounceFn, useScroll } from '@vueuse/core'
+import { getUUID } from '@/utils'
 import { WaterfallData2DType, WaterfallDataType } from './types'
 import { generateRandomTitle, getColumnNum, getTextInfo } from './utils'
 
@@ -43,6 +44,7 @@ const getWaterfallData2D = (newData?: WaterfallDataType[]) => {
       ? multiColumnWaterfallData.value
       : new Array(columnNum.value).fill(null).map(() => {
           return {
+            uuid: getUUID(),
             height: 0,
             data: []
           }
@@ -86,6 +88,7 @@ const windowResize = useDebounceFn(() => {
   columnNum.value = getColumnNum()
   console.log('windowResize', columnNum.value)
   getWaterfallData2D()
+  console.log('multiColumnWaterfallData', multiColumnWaterfallData.value)
 }, 100)
 
 const loadMoreData = () => {
@@ -126,9 +129,9 @@ onUnmounted(() => {
   <ul wh-full flex flex-nowrap gap-4 overflow-auto ref="containerRef" class="hide-scrollbar">
     <!-- 列 -->
     <li
-      v-for="(colArray, index) in multiColumnWaterfallData"
+      v-for="colArray in multiColumnWaterfallData"
       ref="colRef"
-      :key="index"
+      :key="colArray.uuid"
       flex-1
       min-w-50
       flex

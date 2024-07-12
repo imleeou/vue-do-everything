@@ -8,9 +8,9 @@ export interface WaterfallDataType {
   background: string
 }
 
-
 /** 二维瀑布流数据类型 */
 export interface WaterfallData2DType {
-  height: number;
-  data: WaterfallDataType[];
+  uuid: string
+  height: number
+  data: WaterfallDataType[]
 }
