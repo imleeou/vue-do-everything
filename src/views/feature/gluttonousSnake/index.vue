@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref, onUnmounted, computed } from 'vue'
 import confetti from 'canvas-confetti'
+import { getRandomInt, getUUID } from '@/utils/index'
 import { WIDTH, HEIGHT, DirectionEnum, GameStatusEnum, DIAMETER, SPEED } from './constants'
-import { getRandomInt, getUUID } from './utils'
 import type { SnakeDataType } from './types'
 import { useKeyboardLongPress, BehaviorEnum } from '@/hooks/useKeyboardLongPress'
 
