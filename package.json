@@ -39,5 +39,13 @@
     "unplugin-vue-components": "^0.25.1",
     "vite": "^3.1.0",
     "vue-tsc": "^1.0.1"
+  },
+  "resolutions": {
+    "esbuild": "npm:esbuild-wasm@latest"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "npm:esbuild-wasm@latest"
+    }
   }
 }
