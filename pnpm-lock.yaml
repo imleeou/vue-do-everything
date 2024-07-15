@@ -32,6 +32,9 @@ importers:
       vue:
         specifier: ^3.2.37
         version: 3.4.31(typescript@4.9.5)
+      vue-demi:
+        specifier: ^0.14.8
+        version: 0.14.8(vue@3.4.31(typescript@4.9.5))
       vue-router:
         specifier: '4'
         version: 4.4.0(vue@3.4.31(typescript@4.9.5))
