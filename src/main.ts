@@ -8,6 +8,10 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 // 全局样式
 import '@/assets/css/index.css'
 import 'virtual:uno.css'
+import { registerDirectives } from '@/directives/index'
+import '@/directives/hoverLight/index.css'
 
 const app = createApp(App)
+
+registerDirectives(app)
 app.use(router).mount('#app')

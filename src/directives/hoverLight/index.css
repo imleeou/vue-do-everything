@@ -1,0 +1,10 @@
+.__hover-light-effect {
+  position: absolute;
+  width: 20%;
+  padding-top: 20%;
+  filter: blur(40px);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  display: none;
+  background: radial-gradient(circle, rgba(245, 49, 255, 0.5) 0%, rgba(245, 49, 255, 0) 100%);
+}
